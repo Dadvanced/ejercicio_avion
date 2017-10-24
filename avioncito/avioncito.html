@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+   		<meta name="viewport" content="width=device-width">
+		<title>avioncito</title>
+		
+		<script>
+			var intervalo; //mueve el avión
+			var intervalo2; //hace caer la bomba
+			var avion;
+			var contenedor; //div ciudad
+			var movimiento = 10;
+			var x; //posición horizontal del avión
+			var y; //posición vertical de la bomba
+			var contador = 0; //contaremos las bombas creadas
+			setInterval(caeBomba, 25);
+			window.onload = function() {
+				iniciar();
+			}
+
+			function iniciar() {
+				contenedor = document.getElementById("ciudad");
+				edificio = document.createElement("div");
+				edificio.style.left = "50px";				
+				edificio.style.top = "465px";
+				edificio.style.height = "217px";
+				edificio.style.width = "92px";
+				edificio.className = "edificio";
+				edificio.style.position = "absolute";
+				edificio.style.id = "edificio1";
+				edificio.style.backgroundImage =  "url(images/building.png)";
+				contenedor.appendChild(edificio);
+
+				edificio = document.createElement("div");
+				edificio.style.left = "300px";				
+				edificio.style.top = "465px";
+				edificio.style.height = "217px";
+				edificio.style.width = "92px";
+				edificio.style.position = "absolute";
+				edificio.className = "edificio";
+				edificio.style.id = "edificio2";
+				edificio.style.backgroundImage =  "url(images/building.png)";
+				contenedor.appendChild(edificio);
+
+				edificio = document.createElement("div");
+				edificio.style.left = "370px";				
+				edificio.style.top = "465px";
+				edificio.style.height = "217px";
+				edificio.style.width = "92px";
+				edificio.style.position = "absolute";
+				edificio.className = "edificio";
+				edificio.style.id = "edificio3";
+				edificio.style.backgroundImage =  "url(images/building.png)";
+				contenedor.appendChild(edificio);
+
+				edificio = document.createElement("div");
+				edificio.style.left = "500px";				
+				edificio.style.top = "465px";
+				edificio.style.height = "217px";
+				edificio.style.width = "92px";
+				edificio.style.position = "absolute";
+				edificio.className = "edificio";
+				edificio.style.id = "edificio4";
+				edificio.style.backgroundImage =  "url(images/building.png)";
+				contenedor.appendChild(edificio);
+
+				edificio = document.createElement("div");
+				edificio.style.left = "700px";				
+				edificio.style.top = "465px";
+				edificio.style.height = "217px";
+				edificio.style.width = "92px";
+				edificio.style.position = "absolute";
+				edificio.className = "edificio";
+				edificio.style.id = "edificio5";
+				edificio.style.backgroundImage =  "url(images/building.png)";
+				contenedor.appendChild(edificio);
+
+    			avion = document.createElement("div");
+    			avion.style.top = "10px";
+    			avion.style.left = "10px";
+    			avion.style.backgroundImage = "url(images/avioncito.png)";
+    			avion.setAttribute("onclick", "boom(this)");
+    			contenedor.appendChild(avion);
+    			intervalo = setInterval(mover, 5);
+    		}
+
+    		function mover() {
+    			if (movimiento > 850) {
+    				movimiento = -10; //si el avion llega al límite de la ciudad, vuelve al principio
+    			} else {
+    				movimiento++;
+    				avion.style.left = movimiento + "px";
+    			}   			
+    		}
+
+    		function boom(avioncito) { //crea la bomba
+    			x = avioncito.style.left;
+    			bomba = document.createElement("div");
+    			bomba.style.position = "absolute";
+    			bomba.className = "bomba";
+    			bomba.style.top = "120px";
+    			bomba.style.borderRadius = "50px";
+    			bomba.style.height = "20px";
+    			bomba.style.width = "20px";
+    			bomba.style.backgroundImage = "url(images/bomb2.png)";
+    			bomba.style.left = x;
+    			contador++;
+    			bomba.id = "bomba" + contador;
+    			console.log(bomba.id);
+
+    			ciudad.appendChild(bomba);
+
+    		}
+    				
+
+    			
+    		function caeBomba() {
+    			bombas = document.getElementsByClassName("bomba");
+
+    			Array.from(bombas).forEach(function(bombita) {
+    				var bombitaLeft = parseInt(bombita.style.left);
+    				var bombitaTop = parseInt(bombita.style.top);
+
+    				if (bombita.offsetTop < 640) {
+    					bombita.style.top = bombita.offsetTop + 3 + "px";
+    				} else {
+    					bombita.style.backgroundImage = "url(images/boom.png)";
+    					bombita.style.width = "50px";
+    					bombita.style.height = "50px";
+    						setTimeout(function() {
+    						 if (bombita.parentNode != null) { //si parentNode existe, elimina la bomba
+    						 	bombita.parentNode.removeChild(bombita);
+    						 }//if
+    						}, 1000);
+    					
+    				}
+
+    				if (bombitaTop >= 433) {
+    					edificios = document.getElementsByClassName("edificio");
+    					Array.from(edificios).forEach(function(building) {
+							if ((building.offsetLeft >= bombitaLeft -20) && (building.offsetLeft <= bombitaLeft +20)) {				
+    							if (bombita.parentNode != null) {
+    								bombita.parentNode.removeChild(bombita);	
+    							}								
+
+								building.style.backgroundImage = "url(images/exBuilding.png)";
+								building.style.width = "92px";
+								building.style.height = "217px";
+								setTimeout(function() {
+									if (building.parentNode != null) {
+										building.parentNode.removeChild(building);
+									}//if									
+								}, 1000);//timeout								
+							}//if 143
+					})//for 142	
+				}//if 140
+ 	   			});
+    		}
+			   		
+		</script>
+
+		<style>
+			#ciudad {
+				background-color: #6965e9;
+				width: 900px;
+    			height: 650px;
+			}
+
+			#ciudad div {
+				position: absolute;
+				width: 120px;
+				height: 120px;
+			}
+
+			#suelo {
+				width: 900px;
+				height: 50px;
+				background-color: brown;
+			}
+			.edificio {
+
+			}
+
+			.bomba {
+
+			}
+
+		</style>
+	</head>
+	<body>
+		<div id="ciudad"></div>
+		<div id="suelo"></div>
+	</body>
+</html>
